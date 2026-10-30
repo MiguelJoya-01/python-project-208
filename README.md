@@ -2,37 +2,72 @@
 
 [![hexlet-check](https://github.com/MiguelJoya-01/python-project-208/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/MiguelJoya-01/python-project-208/actions)
 
+Aplicación web desarrollada con Django como proyecto de aprendizaje de Códica.
+
+## Aplicación desplegada
+
+**URL:** https://hexlet-code-3qlk.onrender.com
+
+## Descripción
+
 Aprenderás con un proyecto real cómo diseñar bases de datos, usar plataformas PaaS, integrar un servicio de seguimiento de errores, trabajar con ORM, Django, plantillas y Bootstrap.
 
 Proyecto de aprendizaje de Códica: https://app.codica.la/programs/python
+
 Así debería funcionar: https://files.hexlet.app/a/64zdfp
 
 ## Stack
 
 - Python
+- Django
+- Gunicorn
+- SQLite
+- PostgreSQL (configurable mediante variables de entorno)
+- WhiteNoise
+- uv
 
 ## Instalación
 
-<!-- Describa la instalación: clonación, dependencias, variables de entorno -->
+Clona el repositorio:
 
 ```bash
 git clone https://github.com/MiguelJoya-01/python-project-208.git
 cd python-project-208
 ```
 
-## Uso
+Instala las dependencias:
 
-<!-- Agregue ejemplos de ejecución y una grabación de asciinema: esto es lo que miran los empleadores -->
+```bash
+uv sync
+```
 
----
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
-<details>
-<summary>Pruebas automáticas de Códica</summary>
+```env
+SECRET_KEY=tu-clave-secreta
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,webserver
+```
 
-Las pruebas se ejecutan en cada commit. El archivo `.github/workflows/hexlet-check.yml` es el responsable de ejecutarlas: no lo elimine ni lo renombre, y no cambie el nombre del repositorio.
+Ejecuta las migraciones:
 
-</details>
+```bash
+uv run python manage.py migrate
+```
 
-## Acerca de Códica
+Inicia el servidor de desarrollo:
 
-[Códica](https://app.codica.la/) es una escuela de programación: programas de aprendizaje propios con práctica, apoyo de mentores y proyectos reales que quedan en su currículum. Este repositorio es uno de esos proyectos.
+```bash
+uv run python manage.py runserver
+```
+
+Abre http://127.0.0.1:8000/ en tu navegador.
+
+## Despliegue
+
+El proyecto está desplegado en Render.
+
+- **Build Command:** `make build`
+- **Start Command:** `make render-start`
+
+La configuración de producción utiliza variables de entorno para gestionar la clave secreta, el modo de depuración y la conexión
