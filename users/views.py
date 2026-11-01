@@ -49,14 +49,19 @@ class UserUpdateView(
         return self.get_object() == self.request.user
 
 
-class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class UserDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    SuccessMessageMixin,
+    DeleteView,
+):
     model = User
     template_name = 'users/user_confirm_delete.html'
     success_url = reverse_lazy('users')
+    success_message = 'Usuario eliminado con éxito'
 
     def test_func(self):
         return self.get_object() == self.request.user
-
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
