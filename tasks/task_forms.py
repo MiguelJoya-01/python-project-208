@@ -27,3 +27,18 @@ class TaskForm(forms.ModelForm):
         self.fields['executor'].label_from_instance = (
             lambda user: user.get_full_name() or user.username
         )
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+
+        tasks = Task.objects.filter(name__iexact=name)
+
+        if self.instance.pk:
+            tasks = tasks.exclude(pk=self.instance.pk)
+
+        if tasks.exists():
+            raise forms.ValidationError(
+                'Ya existe una tarea con ese nombre.'
+            )
+
+        return name
