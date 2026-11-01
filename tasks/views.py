@@ -13,6 +13,7 @@ from django_filters.views import FilterView
 from .filters import TaskFilter
 from .forms import LabelForm
 from .models import Label, Task
+from .task_forms import TaskForm
 
 
 class TaskListView(LoginRequiredMixin, FilterView):
@@ -26,7 +27,7 @@ class TaskListView(LoginRequiredMixin, FilterView):
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
-    fields = ['name', 'description', 'status', 'executor', 'labels']
+    form_class = TaskForm
     template_name = 'tasks/task_form.html'
     success_url = reverse_lazy('task_list')
 
@@ -38,7 +39,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = ['name', 'description', 'status', 'executor', 'labels']
+    form_class = TaskForm
     template_name = 'tasks/task_form.html'
     success_url = reverse_lazy('task_list')
 
