@@ -1,4 +1,3 @@
-
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
@@ -12,6 +11,11 @@ class CustomUserCreationForm(UserCreationForm):
     )
     last_name = forms.CharField(
         label='Apellidos',
+        max_length=150,
+        required=True,
+    )
+    username = forms.CharField(
+        label='Nombre de usuario',
         max_length=150,
         required=True,
     )
