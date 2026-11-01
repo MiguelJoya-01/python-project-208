@@ -1,4 +1,5 @@
-from django.contrib.auth import login, logout
+from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
@@ -64,15 +65,15 @@ class CustomLoginView(LoginView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        from django.contrib import messages
         messages.success(self.request, 'Has iniciado sesión')
         return response
 
     def get_success_url(self):
         return reverse_lazy('index')
 
+
 class CustomLogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         logout(request)
+        messages.success(request, 'Has cerrado sesión')
         return redirect('index')
-
