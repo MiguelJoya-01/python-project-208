@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -65,10 +66,19 @@ class TaskDeleteView(
         task = self.get_object()
         return task.author == self.request.user
 
+    def handle_no_permission(self):
+        if self.request.method == 'GET':
+            messages.error(
+                self.request,
+                'No puedes eliminar tareas que no has creado.',
+            )
+            return redirect('task_list')
+
+        return super().handle_no_permission()
+
     def form_valid(self, form):
         messages.success(self.request, 'Tarea eliminada con éxito.')
         return super().form_valid(form)
-
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
