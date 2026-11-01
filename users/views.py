@@ -1,4 +1,3 @@
-
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -57,9 +56,14 @@ class CustomLoginView(LoginView):
     authentication_form = AuthenticationForm
     redirect_authenticated_user = True
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['username'].label = 'Nombre de usuario'
+        form.fields['password'].label = 'Contraseña'
+        return form
+
     def get_success_url(self):
         return reverse_lazy('index')
-
 
 class CustomLogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
