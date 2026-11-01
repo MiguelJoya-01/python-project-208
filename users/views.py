@@ -62,6 +62,12 @@ class CustomLoginView(LoginView):
         form.fields['password'].label = 'Contraseña'
         return form
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        from django.contrib import messages
+        messages.success(self.request, 'Has iniciado sesión')
+        return response
+
     def get_success_url(self):
         return reverse_lazy('index')
 
