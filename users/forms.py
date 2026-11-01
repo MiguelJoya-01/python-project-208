@@ -20,6 +20,11 @@ class CustomUserCreationForm(UserCreationForm):
         required=True,
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].label = 'Contraseña'
+        self.fields['password2'].label = 'Confirmar contraseña'
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('first_name', 'last_name', 'username')
