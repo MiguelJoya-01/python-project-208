@@ -1,4 +1,4 @@
-
+```html
 {% load django_bootstrap5 %}
 
 <!DOCTYPE html>
@@ -31,6 +31,14 @@
                             Iniciar sesión
                         </h1>
 
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
                         <form method="post">
                             {% csrf_token %}
 
@@ -57,3 +65,4 @@
 
 </body>
 </html>
+```
