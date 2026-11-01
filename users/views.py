@@ -33,11 +33,17 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     success_message = 'Usuario registrado con éxito'
 
 
-class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UserUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    SuccessMessageMixin,
+    UpdateView,
+):
     model = User
     form_class = CustomUserChangeForm
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('users')
+    success_message = 'Usuario actualizado con éxito'
 
     def test_func(self):
         return self.get_object() == self.request.user
