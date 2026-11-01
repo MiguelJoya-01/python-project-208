@@ -7,12 +7,12 @@ class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(
         label='Nombre',
         max_length=150,
-        required=True,
+        required=False,
     )
     last_name = forms.CharField(
         label='Apellidos',
         max_length=150,
-        required=True,
+        required=False,
     )
     username = forms.CharField(
         label='Nombre de usuario',
@@ -24,7 +24,6 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].label = 'Contraseña'
         self.fields['password2'].label = 'Contraseña (confirmación)'
-
 
     class Meta(UserCreationForm.Meta):
         model = User
