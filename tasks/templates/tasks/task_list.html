@@ -20,6 +20,9 @@
                 <a class="nav-link active" href="{% url 'task_list' %}">
                     Tareas
                 </a>
+                <a class="nav-link" href="{% url 'label_list' %}">
+                    Etiquetas
+                </a>
                 <a class="nav-link" href="{% url 'status_list' %}">
                     Estados
                 </a>
@@ -55,6 +58,60 @@
             <a href="{% url 'task_create' %}" class="btn btn-primary">
                 Crear tarea
             </a>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <h2 class="h5 mb-3">Filtrar tareas</h2>
+
+                <form method="get">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="{{ filter.form.status.id_for_label }}"
+                                   class="form-label">
+                                Estado
+                            </label>
+                            {{ filter.form.status }}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="{{ filter.form.executor.id_for_label }}"
+                                   class="form-label">
+                                Ejecutor
+                            </label>
+                            {{ filter.form.executor }}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="{{ filter.form.label.id_for_label }}"
+                                   class="form-label">
+                                Etiqueta
+                            </label>
+                            {{ filter.form.label }}
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                {{ filter.form.self_tasks }}
+                                <label class="form-check-label"
+                                       for="{{ filter.form.self_tasks.id_for_label }}">
+                                    Solo mis tareas
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            Filtrar
+                        </button>
+                        <a href="{% url 'task_list' %}"
+                           class="btn btn-secondary">
+                            Limpiar filtros
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="card shadow-sm border-0">

@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db import IntegrityError
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -9,15 +8,19 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from django_filters.views import FilterView
 
+from .filters import TaskFilter
 from .models import Label, Task
 
 
-class TaskListView(LoginRequiredMixin, ListView):
+class TaskListView(LoginRequiredMixin, FilterView):
     model = Task
+    filterset_class = TaskFilter
     template_name = 'tasks/task_list.html'
     context_object_name = 'tasks'
     ordering = ['-created_at']
+    queryset = Task.objects.order_by('-created_at')
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):

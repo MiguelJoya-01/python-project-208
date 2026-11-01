@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import User
 from django.db.models.deletion import ProtectedError
 from django.test import TestCase
@@ -29,6 +30,26 @@ class TaskTestCase(TestCase):
         )
         self.task.labels.add(self.label)
 
+        self.other_author = User.objects.create_user(
+            username='otro_autor',
+            password='TestPassword123!',
+        )
+        self.other_executor = User.objects.create_user(
+            username='otro_ejecutor',
+            password='TestPassword123!',
+        )
+        self.other_status = Status.objects.create(name='Completado')
+        self.other_label = Label.objects.create(name='Mejora')
+
+        self.other_task = Task.objects.create(
+            name='Segunda tarea',
+            description='Otra descripción',
+            status=self.other_status,
+            executor=self.other_executor,
+            author=self.other_author,
+        )
+        self.other_task.labels.add(self.other_label)
+
     def test_task_list_requires_login(self):
         response = self.client.get(reverse('task_list'))
 
@@ -48,6 +69,81 @@ class TaskTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Primera tarea')
+
+    def test_filter_tasks_by_status(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(
+            reverse('task_list'),
+            {'status': self.status.pk},
+        )
+
+        self.assertContains(response, 'Primera tarea')
+        self.assertNotContains(response, 'Segunda tarea')
+
+    def test_filter_tasks_by_executor(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(
+            reverse('task_list'),
+            {'executor': self.executor.pk},
+        )
+
+        self.assertContains(response, 'Primera tarea')
+        self.assertNotContains(response, 'Segunda tarea')
+
+    def test_filter_tasks_by_label(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(
+            reverse('task_list'),
+            {'label': self.label.pk},
+        )
+
+        self.assertContains(response, 'Primera tarea')
+        self.assertNotContains(response, 'Segunda tarea')
+
+    def test_filter_only_own_tasks(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(
+            reverse('task_list'),
+            {'self_tasks': 'true'},
+        )
+
+        self.assertContains(response, 'Primera tarea')
+        self.assertNotContains(response, 'Segunda tarea')
+
+    def test_combine_task_filters(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(
+            reverse('task_list'),
+            {
+                'status': self.status.pk,
+                'executor': self.executor.pk,
+                'label': self.label.pk,
+                'self_tasks': 'true',
+            },
+        )
+
+        self.assertContains(response, 'Primera tarea')
+        self.assertNotContains(response, 'Segunda tarea')
 
     def test_create_task(self):
         self.client.login(
@@ -261,3 +357,4 @@ class LabelTestCase(TestCase):
             response,
             'No se puede eliminar una etiqueta asociada a una tarea.',
         )
+
