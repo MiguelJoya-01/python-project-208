@@ -1,3 +1,4 @@
+```django
 {% load django_bootstrap5 %}
 
 <!DOCTYPE html>
@@ -151,12 +152,10 @@
                                            class="btn btn-sm btn-outline-primary">
                                             Editar
                                         </a>
-                                        {% if task.author == request.user %}
-                                            <a href="{% url 'task_delete' task.pk %}"
-                                               class="btn btn-sm btn-outline-danger">
-                                                Eliminar
-                                            </a>
-                                        {% endif %}
+                                        <a href="{% url 'task_delete' task.pk %}"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Eliminar
+                                        </a>
                                     </td>
                                 </tr>
                             {% empty %}
@@ -181,3 +180,4 @@
 
 </body>
 </html>
+```
