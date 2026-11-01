@@ -51,10 +51,29 @@ class CustomUserChangeForm(UserChangeForm):
         required=False,
         widget=forms.PasswordInput,
     )
+    password_confirm = forms.CharField(
+        label='Contraseña (confirmación)',
+        required=False,
+        widget=forms.PasswordInput,
+    )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'password')
+        fields = ('first_name', 'last_name', 'username')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+
+        if password or password_confirm:
+            if password != password_confirm:
+                self.add_error(
+                    'password_confirm',
+                    'Las contraseñas no coinciden.',
+                )
+
+        return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
