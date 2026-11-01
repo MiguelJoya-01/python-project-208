@@ -1,5 +1,5 @@
 install:
-	uv sync --locked
+	uv sync --locked --no-dev
 
 collectstatic:
 	uv run python manage.py collectstatic --noinput
@@ -7,7 +7,7 @@ collectstatic:
 migrate:
 	uv run python manage.py migrate
 
-build: 
+build:
 	./build.sh
 
 render-start:

@@ -18,3 +18,4 @@ __pycache__/
 # Configuración local de herramientas
 .idea/
 .vscode/
+.coverage
