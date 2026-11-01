@@ -30,16 +30,10 @@ from tasks.views import (
 )
 
 
-def sentry_debug(request):
-    raise Exception('Error de prueba para verificar Bugsink')
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', index, name='index'),
-
-    path('sentry-debug/', sentry_debug, name='sentry_debug'),
 
     path('users/', UserListView.as_view(), name='users'),
     path('users/create/', UserCreateView.as_view(), name='user_create'),
