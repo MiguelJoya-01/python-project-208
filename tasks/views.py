@@ -33,6 +33,10 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
+        if not form.cleaned_data.get('executor'):
+            form.instance.executor = self.request.user
+
         messages.success(self.request, 'Tarea creada con éxito')
         return super().form_valid(form)
 
@@ -120,3 +124,4 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
 
         messages.success(self.request, 'Etiqueta eliminada con éxito')
         return super().form_valid(form)
+
