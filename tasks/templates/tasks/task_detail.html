@@ -1,0 +1,89 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ task.name }} | Gestor de tareas</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}">
+                Gestor de tareas
+            </a>
+            <a class="nav-link text-white" href="{% url 'task_list' %}">
+                Tareas
+            </a>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+
+                        <h1 class="h2 mb-4">{{ task.name }}</h1>
+
+                        <h2 class="h6 text-secondary">Descripción</h2>
+                        <p class="mb-4">{{ task.description|linebreaks }}</p>
+
+                        <h2 class="h6 text-secondary">Estado</h2>
+                        <p class="mb-4">{{ task.status.name }}</p>
+
+                        <h2 class="h6 text-secondary">Autor</h2>
+                        <p class="mb-4">{{ task.author.username }}</p>
+
+                        <h2 class="h6 text-secondary">Ejecutor</h2>
+                        <p class="mb-4">{{ task.executor.username }}</p>
+
+                        <h2 class="h6 text-secondary">Etiquetas</h2>
+                        <div class="mb-4">
+                            {% for label in task.labels.all %}
+                                <span class="badge bg-secondary me-1">
+                                    {{ label.name }}
+                                </span>
+                            {% empty %}
+                                <span class="text-secondary">
+                                    Sin etiquetas
+                                </span>
+                            {% endfor %}
+                        </div>
+
+                        <h2 class="h6 text-secondary">Fecha de creación</h2>
+                        <p class="mb-4">
+                            {{ task.created_at|date:"d/m/Y H:i" }}
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'task_list' %}"
+                               class="btn btn-outline-secondary">
+                                Volver a tareas
+                            </a>
+
+                            <a href="{% url 'task_update' task.pk %}"
+                               class="btn btn-primary">
+                                Editar tarea
+                            </a>
+
+                            {% if task.author == request.user %}
+                                <a href="{% url 'task_delete' task.pk %}"
+                                   class="btn btn-danger">
+                                    Eliminar tarea
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eliminar tarea | Gestor de tareas</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}">
+                Gestor de tareas
+            </a>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+
+                        <h1 class="h3 mb-3">Eliminar tarea</h1>
+
+                        <p class="text-secondary">
+                            ¿Estás seguro de que deseas eliminar la tarea
+                            <strong>{{ object.name }}</strong>?
+                        </p>
+
+                        <p class="text-danger">
+                            Esta acción no se puede deshacer.
+                        </p>
+
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="d-flex justify-content-center gap-2">
+                                <button type="submit" class="btn btn-danger">
+                                    Sí, eliminar
+                                </button>
+
+                                <a href="{% url 'task_list' %}"
+                                   class="btn btn-outline-secondary">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
