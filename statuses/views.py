@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import ProtectedError
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -41,5 +42,27 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('status_list')
 
     def form_valid(self, form):
+        status = self.object
+
+        if status.tasks.exists():
+            messages.error(
+                self.request,
+                'No se puede eliminar el estado porque está asociado a tareas.',
+            )
+            return self.render_to_response(
+                self.get_context_data(object=status)
+            )
+
+        try:
+            response = super().form_valid(form)
+        except ProtectedError:
+            messages.error(
+                self.request,
+                'No se puede eliminar el estado porque está asociado a tareas.',
+            )
+            return self.render_to_response(
+                self.get_context_data(object=status)
+            )
+
         messages.success(self.request, 'Estado eliminado con éxito')
-        return super().form_valid(form)
+        return response
