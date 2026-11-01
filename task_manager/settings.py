@@ -1,3 +1,4 @@
+
 """
 Django settings for task_manager project.
 """
@@ -6,11 +7,23 @@ import os
 from pathlib import Path
 
 import dj_database_url
+import sentry_sdk
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Error tracking
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        environment=os.getenv('SENTRY_ENVIRONMENT', 'production'),
+    )
 
 # Security settings
 SECRET_KEY = os.getenv(
