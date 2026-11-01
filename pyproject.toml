@@ -13,6 +13,7 @@ dependencies = [
     "django-bootstrap5>=26.4",
     "django-filter>=26.2",
     "sentry-sdk>=2.73.0",
+    "psycopg[binary]>=3.3.6",
 ]
 
 [dependency-groups]
