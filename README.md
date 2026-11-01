@@ -3,15 +3,15 @@
 [![hexlet-check](https://github.com/MiguelJoya-01/python-project-208/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/MiguelJoya-01/python-project-208/actions)
 [![Coverage](https://github.com/MiguelJoya-01/python-project-208/actions/workflows/coverage.yml/badge.svg)](https://github.com/MiguelJoya-01/python-project-208/actions)
 
-Aplicación web para gestionar tareas, organizada en estados y etiquetas. Permite crear, consultar, editar y eliminar tareas, asignar responsables y filtrar los registros según distintos criterios.
+Aplicación web para gestionar tareas, organizadas mediante estados y etiquetas. Permite crear, consultar y editar tareas, asignar responsables y filtrar registros según distintos criterios.
 
 **Aplicación desplegada:** https://hexlet-code-3qlk.onrender.com
 
 ## Funcionalidades
 
 - Registro, autenticación y gestión de usuarios.
-- Creación, edición y eliminación de estados.
-- Creación, edición y eliminación de etiquetas.
+- Creación y edición de estados; eliminación protegida cuando están asociados a tareas.
+- Creación y edición de etiquetas; eliminación protegida cuando están asociadas a tareas.
 - Creación, consulta y edición de tareas.
 - Asignación de responsables a las tareas.
 - Eliminación de tareas únicamente por sus autores.
@@ -92,7 +92,7 @@ uv run python -m coverage report
 
 El proyecto utiliza Coverage.py con un umbral mínimo de cobertura del **90 %**, configurado en `.coveragerc`.
 
-GitHub Actions ejecuta automáticamente las pruebas y comprueba que se alcance el umbral establecido al realizar cambios en la rama `main` o mediante pull requests.
+GitHub Actions ejecuta automáticamente las pruebas y verifica que la cobertura de código sea igual o superior al 90 %. Si no se alcanza el umbral, la comprobación falla.
 
 ## Despliegue
 
