@@ -1,4 +1,3 @@
-
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -19,6 +18,11 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
     template_name = 'statuses/status_form.html'
     success_url = reverse_lazy('status_list')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['name'].label = 'Nombre'
+        return form
+
     def form_valid(self, form):
         messages.success(self.request, 'Estado creado correctamente.')
         return super().form_valid(form)
@@ -29,6 +33,11 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['name']
     template_name = 'statuses/status_form.html'
     success_url = reverse_lazy('status_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['name'].label = 'Nombre'
+        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Estado actualizado correctamente.')
