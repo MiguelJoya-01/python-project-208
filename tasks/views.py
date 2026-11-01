@@ -11,6 +11,7 @@ from django.views.generic import (
 from django_filters.views import FilterView
 
 from .filters import TaskFilter
+from .forms import LabelForm
 from .models import Label, Task
 
 
@@ -79,14 +80,9 @@ class LabelListView(LoginRequiredMixin, ListView):
 
 class LabelCreateView(LoginRequiredMixin, CreateView):
     model = Label
-    fields = ['name']
+    form_class = LabelForm
     template_name = 'labels/label_form.html'
     success_url = reverse_lazy('label_list')
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['name'].label = 'Nombre'
-        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Etiqueta creada con éxito')
@@ -95,14 +91,9 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
 
 class LabelUpdateView(LoginRequiredMixin, UpdateView):
     model = Label
-    fields = ['name']
+    form_class = LabelForm
     template_name = 'labels/label_form.html'
     success_url = reverse_lazy('label_list')
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields['name'].label = 'Nombre'
-        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Etiqueta actualizada con éxito')
