@@ -70,7 +70,7 @@
 
                             <div class="d-flex gap-2 mt-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Guardar
+                                    {% if object %}Editar{% else %}Crear{% endif %}
                                 </button>
                                 <a href="{% url 'label_list' %}"
                                    class="btn btn-secondary">
