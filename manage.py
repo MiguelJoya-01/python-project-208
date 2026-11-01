@@ -35,10 +35,21 @@ def main():
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
+        diagnostics = [
+            f"Python executable: {sys.executable}",
+            f"Python prefix: {sys.prefix}",
+            f"Python base prefix: {sys.base_prefix}",
+            f"Project directory: {project_dir}",
+            "Virtual environment candidates:",
+        ]
+
+        for candidate in venv_python_candidates:
+            diagnostics.append(
+                f"  {candidate}: exists={candidate.is_file()}"
+            )
+
         raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? "
-            "Did you forget to activate a virtual environment?"
+            "Couldn't import Django.\n" + "\n".join(diagnostics)
         ) from exc
 
     execute_from_command_line(sys.argv)
