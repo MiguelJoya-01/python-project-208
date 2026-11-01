@@ -1,0 +1,68 @@
+
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {% if object %}Editar usuario{% else %}Registrarse{% endif %}
+        | Gestor de tareas
+    </title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Gestor de tareas</a>
+            <a class="nav-link text-white" href="{% url 'users' %}">
+                Usuarios
+            </a>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+
+                        <h1 class="h3 mb-4">
+                            {% if object %}
+                                Editar usuario
+                            {% else %}
+                                Crear cuenta
+                            {% endif %}
+                        </h1>
+
+                        <form method="post">
+                            {% csrf_token %}
+
+                            {% bootstrap_form form %}
+
+                            <button type="submit" class="btn btn-primary w-100 mt-3">
+                                {% if object %}Guardar cambios{% else %}Registrar{% endif %}
+                            </button>
+                        </form>
+
+                        <div class="mt-4 text-center">
+                            {% if object %}
+                                <a href="{% url 'users' %}">Volver a usuarios</a>
+                            {% else %}
+                                <a href="{% url 'login' %}">
+                                    ¿Ya tienes cuenta? Inicia sesión
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
