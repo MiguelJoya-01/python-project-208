@@ -116,7 +116,7 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
         if label.tasks.exists():
             messages.error(
                 self.request,
-                'No se puede eliminar una etiqueta asociada a una tarea.',
+                'No se puede eliminar la etiqueta. No se puede eliminar una etiqueta asociada a una tarea.',
             )
             return self.render_to_response(
                 self.get_context_data(object=label)
