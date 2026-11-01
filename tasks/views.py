@@ -83,6 +83,11 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
     template_name = 'labels/label_form.html'
     success_url = reverse_lazy('label_list')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['name'].label = 'Nombre'
+        return form
+
     def form_valid(self, form):
         messages.success(self.request, 'Etiqueta creada correctamente.')
         return super().form_valid(form)
@@ -93,6 +98,11 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['name']
     template_name = 'labels/label_form.html'
     success_url = reverse_lazy('label_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['name'].label = 'Nombre'
+        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Etiqueta actualizada correctamente.')
