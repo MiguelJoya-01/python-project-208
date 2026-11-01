@@ -17,6 +17,10 @@ from statuses.views import (
     StatusUpdateView,
 )
 from tasks.views import (
+    LabelCreateView,
+    LabelDeleteView,
+    LabelListView,
+    LabelUpdateView,
     TaskCreateView,
     TaskDeleteView,
     TaskDetailView,
@@ -78,5 +82,18 @@ urlpatterns = [
         'tasks/<int:pk>/',
         TaskDetailView.as_view(),
         name='task_detail',
+    ),
+
+    path('labels/', LabelListView.as_view(), name='label_list'),
+    path('labels/create/', LabelCreateView.as_view(), name='label_create'),
+    path(
+        'labels/<int:pk>/update/',
+        LabelUpdateView.as_view(),
+        name='label_update',
+    ),
+    path(
+        'labels/<int:pk>/delete/',
+        LabelDeleteView.as_view(),
+        name='label_delete',
     ),
 ]

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import IntegrityError
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -9,7 +10,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Task
+from .models import Label, Task
 
 
 class TaskListView(LoginRequiredMixin, ListView):
@@ -64,3 +65,53 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'tasks/task_detail.html'
     context_object_name = 'task'
+
+
+class LabelListView(LoginRequiredMixin, ListView):
+    model = Label
+    template_name = 'labels/label_list.html'
+    context_object_name = 'labels'
+    ordering = ['-created_at']
+
+
+class LabelCreateView(LoginRequiredMixin, CreateView):
+    model = Label
+    fields = ['name']
+    template_name = 'labels/label_form.html'
+    success_url = reverse_lazy('label_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Etiqueta creada correctamente.')
+        return super().form_valid(form)
+
+
+class LabelUpdateView(LoginRequiredMixin, UpdateView):
+    model = Label
+    fields = ['name']
+    template_name = 'labels/label_form.html'
+    success_url = reverse_lazy('label_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Etiqueta actualizada correctamente.')
+        return super().form_valid(form)
+
+
+class LabelDeleteView(LoginRequiredMixin, DeleteView):
+    model = Label
+    template_name = 'labels/label_confirm_delete.html'
+    success_url = reverse_lazy('label_list')
+
+    def form_valid(self, form):
+        label = self.object
+
+        if label.tasks.exists():
+            messages.error(
+                self.request,
+                'No se puede eliminar una etiqueta asociada a una tarea.',
+            )
+            return self.render_to_response(
+                self.get_context_data(object=label)
+            )
+
+        messages.success(self.request, 'Etiqueta eliminada correctamente.')
+        return super().form_valid(form)

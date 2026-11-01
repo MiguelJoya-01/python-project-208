@@ -116,7 +116,7 @@ class TaskTestCase(TestCase):
         )
 
     def test_cannot_delete_another_users_task(self):
-        another_user = User.objects.create_user(
+        User.objects.create_user(
             username='otro',
             password='TestPassword123!',
         )
@@ -155,4 +155,109 @@ class TaskTestCase(TestCase):
 
         self.assertTrue(
             User.objects.filter(pk=self.author.pk).exists()
+        )
+
+
+class LabelTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='miguel',
+            password='TestPassword123!',
+        )
+        self.label = Label.objects.create(name='Urgente')
+
+    def test_label_list_requires_login(self):
+        response = self.client.get(reverse('label_list'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('label_list')}",
+        )
+
+    def test_label_list(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.get(reverse('label_list'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Urgente')
+
+    def test_create_label(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.post(
+            reverse('label_create'),
+            {'name': 'Mejora'},
+        )
+
+        self.assertRedirects(response, reverse('label_list'))
+        self.assertTrue(
+            Label.objects.filter(name='Mejora').exists()
+        )
+
+    def test_update_label(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.post(
+            reverse('label_update', args=[self.label.pk]),
+            {'name': 'Bug'},
+        )
+
+        self.assertRedirects(response, reverse('label_list'))
+
+        self.label.refresh_from_db()
+        self.assertEqual(self.label.name, 'Bug')
+
+    def test_delete_label(self):
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.post(
+            reverse('label_delete', args=[self.label.pk])
+        )
+
+        self.assertRedirects(response, reverse('label_list'))
+        self.assertFalse(
+            Label.objects.filter(pk=self.label.pk).exists()
+        )
+
+    def test_cannot_delete_label_associated_with_task(self):
+        status = Status.objects.create(name='Nuevo')
+        task = Task.objects.create(
+            name='Tarea de prueba',
+            description='Descripción',
+            status=status,
+            executor=self.user,
+            author=self.user,
+        )
+        task.labels.add(self.label)
+
+        self.client.login(
+            username='miguel',
+            password='TestPassword123!',
+        )
+
+        response = self.client.post(
+            reverse('label_delete', args=[self.label.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(
+            Label.objects.filter(pk=self.label.pk).exists()
+        )
+        self.assertContains(
+            response,
+            'No se puede eliminar una etiqueta asociada a una tarea.',
         )

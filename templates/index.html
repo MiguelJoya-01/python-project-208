@@ -48,6 +48,12 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'label_list' %}">
+                                Etiquetas
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <span class="nav-link">
                                 Hola, {{ request.user.username }}
                             </span>
@@ -100,6 +106,10 @@
                             <a href="{% url 'status_list' %}"
                                class="btn btn-outline-primary btn-lg">
                                 Estados
+                            </a>
+                            <a href="{% url 'label_list' %}"
+                               class="btn btn-outline-primary btn-lg">
+                                Etiquetas
                             </a>
                             <a href="{% url 'users' %}"
                                class="btn btn-outline-secondary btn-lg">
