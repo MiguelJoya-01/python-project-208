@@ -70,7 +70,7 @@ class TaskDeleteView(
         if self.request.method == 'GET':
             messages.error(
                 self.request,
-                'No puedes eliminar tareas que no has creado.',
+                'Solo el autor puede eliminar la tarea',
             )
             return redirect('task_list')
 
