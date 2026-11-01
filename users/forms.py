@@ -31,8 +31,39 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
-    password = None
+    first_name = forms.CharField(
+        label='Nombre',
+        max_length=150,
+        required=False,
+    )
+    last_name = forms.CharField(
+        label='Apellidos',
+        max_length=150,
+        required=False,
+    )
+    username = forms.CharField(
+        label='Nombre de usuario',
+        max_length=150,
+        required=True,
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        required=False,
+        widget=forms.PasswordInput,
+    )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username')
+        fields = ('first_name', 'last_name', 'username', 'password')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+
+        if password:
+            user.set_password(password)
+
+        if commit:
+            user.save()
+
+        return user
