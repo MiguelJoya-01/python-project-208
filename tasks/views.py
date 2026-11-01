@@ -89,7 +89,7 @@ class LabelCreateView(LoginRequiredMixin, CreateView):
         return form
 
     def form_valid(self, form):
-        messages.success(self.request, 'Etiqueta creada correctamente.')
+        messages.success(self.request, 'Etiqueta creada con éxito')
         return super().form_valid(form)
 
 
@@ -105,7 +105,7 @@ class LabelUpdateView(LoginRequiredMixin, UpdateView):
         return form
 
     def form_valid(self, form):
-        messages.success(self.request, 'Etiqueta actualizada correctamente.')
+        messages.success(self.request, 'Etiqueta actualizada con éxito')
         return super().form_valid(form)
 
 
@@ -126,5 +126,5 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
                 self.get_context_data(object=label)
             )
 
-        messages.success(self.request, 'Etiqueta eliminada correctamente.')
+        messages.success(self.request, 'Etiqueta eliminada con éxito')
         return super().form_valid(form)
